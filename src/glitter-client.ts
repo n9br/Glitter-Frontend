@@ -22,9 +22,9 @@ class Glit {
     text: string;
     datetime: string;
 
-    constructor(data: { avatarId: number; user: string; text: string; datetime: string | number | Date; }) {
+    constructor(data: { avatarid: number; user: string; text: string; datetime: string | number | Date; }) {
         // this.id = data.id;
-        this.avatarId = data.avatarId;
+        this.avatarId = data.avatarid;
         this.user = data.user;
         this.text = data.text;
         this.datetime = new Date(data.datetime).toLocaleDateString() + " " + new Date(data.datetime).toLocaleTimeString();
@@ -52,7 +52,7 @@ function renderCard(glit: Glit) {
         <div class="uk-card-header">
             <div class="uk-grid-small uk-flex-middle" uk-grid>
                 <div class="uk-width-auto">
-                    <img class="uk-border-circle" width="40" height="40" src="https://i.pravatar.cc/${glit.avatarId}" alt="Avatar">
+                    <img class="uk-border-circle" width="40" height="40" src="https://i.pravatar.cc/${glit.avatard}" alt="Avatar">
                 </div>
                 <div class="uk-width-expand">
                     <h3 class="uk-card-title uk-margin-remove-bottom">${glit.user}</h3>
@@ -110,7 +110,7 @@ function postGlitToBackend(glitUser: string, glitText: string, avatarId: number)
         },
         body: JSON.stringify({
                 user: glitUser,
-                avatarId: avatarId,
+                avatarid: avatarId,
                 text: glitText,
                 datetime: new Date()
         })
