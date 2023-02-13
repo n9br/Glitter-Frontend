@@ -100,6 +100,29 @@ function saveGlit() {
     postGlitToBackend(glitUser, glitText, avatarId);
 }
 
+function submitUserlogin() {
+    const loginUser = document.getElementById("login-username") as HTMLInputElement;
+    const loginPassword = document.getElementById("login-password") as HTMLInputElement;
+
+    if (loginUser && loginPassword) {
+        postLoginToBackend(loginUser.value,loginPassword.value)
+    }
+}
+
+function postLoginToBackend(loginUser: string, loginPassword: string) {
+    fetch("http://localhost:4000/sessions", {
+        method: 'POST',
+        headers: {
+            'Content-Type':'application/json',
+        },
+        body: JSON.stringify({
+            username: loginUser,
+            password: loginPassword
+        })
+    })
+    .then(res => console.log(res))
+}
+
 function postGlitToBackend(glitUser: string, glitText: string, avatarId: number) {
 
     fetch('http://localhost:4000/glits', {
