@@ -31,6 +31,9 @@ class Glit {
     }
 }
 
+// interface Window { MyNamespace: any; }
+// window.MyNamespace = window.MyNamespace || {};
+
 function getRandomInt(max: number) {
 	return Math.floor(Math.random() * (max + 1));
 }
@@ -79,14 +82,18 @@ function getGlitsFromBackend() {
         // .then(json => {
         //     const glitts = json.map(glitt => new Glitt(glitt))
         //     displayGlitts(glitts)
+
+        document.getElementById("gl-card-container")!.innerHTML = ""; 
         
         function appendData(data) {
             let glit: Glit;
+            let Glits: Array<Glit> = [];
             let glitRender: string;
             for (var i = 0; i < data.length; i++) {
                 glit = new Glit(data[i]);     // write to JS object
-                console.log("Hello from appendData - handling: ");
-                console.log(glit);
+                Glits.push(glit);
+                // console.log("Hello from appendData - handling: ");
+                // console.log(glit);
                 glitRender = renderCard(glit);
                 document.getElementById("gl-card-container")!.innerHTML += glitRender; 
             }        
@@ -99,6 +106,33 @@ function saveGlit() {
     const avatarId = getRandomInt(150);
     postGlitToBackend(glitUser, glitText, avatarId);
 }
+
+function resetFormElement(elementId: string) {
+    const formElement = document.getElementById(elementId) as HTMLInputElement;
+    console.log("Formelement Value: " + formElement + formElement.value)
+    // if (formElement) { formElement.value == ""; }
+    formElement.value == "";
+};
+
+function resetForm() {
+    const textElement = document.getElementById(
+      "gl-glittext"
+    ) as HTMLInputElement;
+    const nameElement = document.getElementById(
+      "gl-glituser"
+    ) as HTMLInputElement;
+  
+    if (textElement && nameElement) {
+      textElement.value = "";
+      nameElement.value = "";
+    }
+  }
+
+function hideModal( modalName: string) {
+    const modalElement = document.getElementById(modalName);
+    // @ts-ignore
+    UIkit.modal(modalElement).hide();
+};
 
 function submitUserlogin() {
     const loginUser = document.getElementById("login-username") as HTMLInputElement;
@@ -138,23 +172,30 @@ function postGlitToBackend(glitUser: string, glitText: string, avatarId: number)
                 datetime: new Date()
         })
     })
-    .then(res => console.log(res))
+    // .then(res => console.log(res))
     // .then(res => res.json())
     // .then(res => console.log(JSON.stringify(res)))
-    // .then(res => {
-    //     if (res.status === 201) {
-    //         UIkit.notification({
-    //             message: "Glitt created!",
-    //             status: "success",
-    //             pos: "bottom-center",
-    //             timeout: 3_000
-    //         });
-    //         resetForm()
-    //         getGlittsFromBackend()
-    //         hideModal()
-    //     }
-    // })
+    .then((res) => {
+        if (res.status === 201) {
+            // @ts-ignore
+            UIkit.notification({
+                message: "Glitt created!",
+                status: "success",
+                pos: "bottom-center",
+                timeout: 2_200
+            // console.log(res.token)
+            // window.localStorage.setItem('glittertoken','xyz');
+            });
+        getGlitsFromBackend();
+        // resetFormElement("gl-glittext");
+        // resetFormElement("gl-glituser");
+        resetForm();
+        console.log("getGlitsFromBackend");
+        hideModal('gl-create-glitt-modal');
+        }
+    })   
 }
+
 
 // Main
 getGlitsFromBackend()
