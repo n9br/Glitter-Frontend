@@ -70,6 +70,8 @@ function renderCard(glit: Glit) {
     `
 }
 
+
+
 function getGlitsFromBackend() {
     fetch("http://localhost:4000/glits")
         // .then(res => console.log(res))
@@ -147,14 +149,18 @@ function postLoginToBackend(loginUser: string, loginPassword: string) {
     fetch("http://localhost:4000/sessions", {
         method: 'POST',
         headers: {
-            'Content-Type':'application/json',
+            'Accept': 'application/json',
+            'Content-Type':'application/json'
         },
         body: JSON.stringify({
             username: loginUser,
             password: loginPassword
         })
     })
-    .then(res => console.log(res))
+    .then(res => res.json())
+    .then(json => console.log("Json Token : " + json.token));
+        // console.log(res)
+    // }
 }
 
 function postGlitToBackend(glitUser: string, glitText: string, avatarId: number) {
